@@ -7,38 +7,45 @@ type category struct {
 }
 
 type item struct {
-	cat   category
+	name  string
+	cat   *category
 	cost  float32
 	price float32
 }
 
 type location struct {
 	address   string
-	inventory map[item]int
-	items     []item
+	inventory map[*item]int
+	items     []*item
 }
 
-func (l *location) show() {
+func (l *location) Show() {
 	for _, item := range l.items {
-		fmt.Println(l.inventory[item])
+		fmt.Println(item.name, ": ", l.inventory[item])
 	}
 }
 
-func newItem(cat category, cost float32, price float32) *item {
-	a := &item{cat, cost, price}
+func NewItem(name string, cat *category, cost float32, price float32) *item {
+	a := &item{name, cat, cost, price}
 	return a
 }
 
-func newLocation(s string) *location {
-	m := make(map[item]int)
-	l := make([]item)
+func NewLocation(s string) *location {
+	m := make(map[*item]int)
+	l := make([]*item, 0)
 
 	a := &location{s, m, l}
 
 	return a
 }
 
-func containsItem(l []item, x item) bool {
+func NewCategory(tax float32) *category {
+	a := &category{tax}
+
+	return a
+}
+
+func containsItem(l []*item, x *item) bool {
 	contains := false
 
 	for _, i := range l {
@@ -49,7 +56,7 @@ func containsItem(l []item, x item) bool {
 	return contains
 }
 
-func (l *location) addItem(x item, y int) *location {
+func (l *location) AddItem(x *item, y int) *location {
 	contains := containsItem(l.items, x)
 
 	switch contains {
@@ -59,5 +66,7 @@ func (l *location) addItem(x item, y int) *location {
 		l.items = append(l.items, x)
 		l.inventory[x] = y
 	}
+
+	return l
 
 }
