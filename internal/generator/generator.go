@@ -14,15 +14,25 @@ type item struct {
 }
 
 type location struct {
+	name      string
 	address   string
 	inventory map[*item]int
 	items     []*item
+	owed      float32
 }
 
 func (l *location) Show() {
+	fmt.Println(l.name)
+
+	fmt.Println("\nCurrent inventory:")
+
 	for _, item := range l.items {
 		fmt.Println(item.name, ": ", l.inventory[item])
 	}
+
+	fmt.Println("\nOutstanding balance for ", l.name, " :")
+
+	fmt.Println(l.owed)
 }
 
 func NewItem(name string, cat *category, cost float32, price float32) *item {
@@ -30,11 +40,11 @@ func NewItem(name string, cat *category, cost float32, price float32) *item {
 	return a
 }
 
-func NewLocation(s string) *location {
+func NewLocation(name, address string) *location {
 	m := make(map[*item]int)
 	l := make([]*item, 0)
 
-	a := &location{s, m, l}
+	a := &location{name, address, m, l, 0}
 
 	return a
 }
@@ -69,4 +79,11 @@ func (l *location) AddItem(x *item, y int) *location {
 
 	return l
 
+}
+
+func (l *location) TakeStock(x *item, y int) *location {
+	sold := l.inventory[x] - y
+	l.owed += float32(sold) * x.price
+
+	return l
 }
