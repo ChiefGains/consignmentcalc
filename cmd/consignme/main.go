@@ -5,15 +5,28 @@ import (
 )
 
 func main() {
-	food := generator.NewCategory(.06)
-	burgerpalace := generator.NewLocation("Burger Palace", "address")
-	hamburger := generator.NewItem("hamburger", food, 1, 2)
-	cheeseburger := generator.NewItem("cheeseburger", food, 1.5, 2.75)
 
-	burgerpalace.AddItem(hamburger, 5)
-	burgerpalace.AddItem(cheeseburger, 4)
-	burgerpalace.Show()
-	burgerpalace.TakeStock(hamburger, 3)
-	burgerpalace.TakeStock(cheeseburger, 0)
-	burgerpalace.Show()
+	food := generator.NewCategory(.06)
+	hamburger := generator.NewItem("Hamburger", food, 1, 2)
+	cheeseburger := generator.NewItem("Cheeseburger", food, 1.25, 2.5)
+
+	BurgerPalace := generator.NewLocation("Burger Palace", "1000 Hamburgler Blvd")
+
+	BurgerPalace.AddItem(hamburger, 5)
+	BurgerPalace.AddItem(cheeseburger, 8)
+
+	BurgerPalace.TakeStock(hamburger, 2)
+	BurgerPalace.TakeStock(cheeseburger, 3)
+	BurgerPalace.AddItem(hamburger, 3)
+	BurgerPalace.AddItem(cheeseburger, 5)
+
+	BurgerPalace.TakeStock(hamburger, 1)
+	BurgerPalace.TakeStock(cheeseburger, 4)
+	BurgerPalace.Show()
+
+	BurgerPalace.TakePayment(20)
+	BurgerPalace.Show()
+	hamburger.Show()
+	cheeseburger.Show()
+
 }
