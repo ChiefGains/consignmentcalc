@@ -6,7 +6,7 @@ import (
 
 func main() {
 
-	food := generator.NewCategory(.06)
+	food := generator.NewCategory("food", .06)
 	hamburger := generator.NewItem("Hamburger", food, 1, 2)
 	cheeseburger := generator.NewItem("Cheeseburger", food, 1.25, 2.5)
 

@@ -2,24 +2,25 @@ package generator
 
 import "fmt"
 
-type category struct {
-	tax float32
+type Category struct { //mostly for data analysis
+	name string
+	tax  float32
 }
 
-type item struct {
+type Item struct { //item that is being sold for consignment
 	name    string
-	cat     *category
+	cat     *Category
 	cost    float32
 	price   float32
 	dropped int
 	sold    int
 }
 
-type location struct {
+type Location struct { //place where consignment items are being sold
 	name      string
 	address   string
-	inventory map[*item]*salesData //stores the item and quantity, and eventually sales data
-	items     []*item              //I have this in addition to the map so that items in a location can eventually be sorted
+	inventory map[*Item]*salesData //stores the item quantity and sales
+	items     []*Item              //I have this in addition to the map so that items in a location can eventually be sorted
 	owed      float32
 	paid      float32
 }
@@ -29,7 +30,7 @@ type salesData struct {
 	sold     int
 }
 
-func (l *location) Show() { //shows current information for location
+func (l *Location) Show() { //shows current information for location
 	fmt.Println(l.name)
 
 	fmt.Println("\nCurrent inventory:")
@@ -49,27 +50,27 @@ func (l *location) Show() { //shows current information for location
 	fmt.Println(l.paid)
 }
 
-func NewItem(name string, cat *category, cost float32, price float32) *item {
-	a := &item{name, cat, cost, price, 0, 0}
+func NewItem(name string, cat *Category, cost float32, price float32) *Item {
+	a := &Item{name, cat, cost, price, 0, 0}
 	return a
 }
 
-func NewLocation(name, address string) *location { //creates a new location to populate with items
-	m := make(map[*item]*salesData)
-	l := make([]*item, 0)
+func NewLocation(name, address string) *Location { //creates a new location to populate with items
+	m := make(map[*Item]*salesData)
+	l := make([]*Item, 0)
 
-	a := &location{name, address, m, l, 0, 0}
-
-	return a
-}
-
-func NewCategory(tax float32) *category { //in case you want to track data for a certain group of items
-	a := &category{tax} //this isn't really necessary for retail consignment in PA, but what the heck
+	a := &Location{name, address, m, l, 0, 0}
 
 	return a
 }
 
-func containsItem(l []*item, x *item) bool { //checks whether a location has been stocked with an item
+func NewCategory(s string, tax float32) *Category { //in case you want to track data for a certain group of items
+	a := &Category{s, tax} //this isn't really necessary for retail consignment in PA, but what the heck
+
+	return a
+}
+
+func containsItem(l []*Item, x *Item) bool { //checks whether a location has been stocked with an item
 	contains := false
 
 	for _, i := range l { //if the item is found in the slice, return "true"
@@ -80,7 +81,7 @@ func containsItem(l []*item, x *item) bool { //checks whether a location has bee
 	return contains
 }
 
-func (l *location) AddItem(x *item, y int) { //adds inventory to the location, unfortunately one item at a time currently
+func (l *Location) AddItem(x *Item, y int) { //adds inventory to the location, unfortunately one item at a time currently
 	contains := containsItem(l.items, x) //check to see if the item is currently stocked
 
 	switch contains {
@@ -98,7 +99,7 @@ func (l *location) AddItem(x *item, y int) { //adds inventory to the location, u
 
 }
 
-func (l *location) TakeStock(x *item, y int) *location { //sold is original inventory - current inventory
+func (l *Location) TakeStock(x *Item, y int) *Location { //sold is original inventory - current inventory
 	sold := l.inventory[x].quantity - y
 	l.owed += float32(sold) * x.price
 	l.inventory[x].quantity = y
@@ -109,12 +110,12 @@ func (l *location) TakeStock(x *item, y int) *location { //sold is original inve
 	return l
 }
 
-func (l *location) TakePayment(x float32) {
+func (l *Location) TakePayment(x float32) {
 	l.owed -= x
 	l.paid += x
 }
 
-func (x *item) Show() {
+func (x *Item) Show() {
 	fmt.Println(x.name)
 	fmt.Println("\nProduction Cost:\n", x.cost)
 	fmt.Println("\nWholesale Price:\n", x.price)
