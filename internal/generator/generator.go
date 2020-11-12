@@ -2,61 +2,70 @@ package generator
 
 import "fmt"
 
-type Category struct { //mostly for data analysis
-	name string
-	tax  float32
+//Category is a struct that holds data about what
+//category an *Item belongs to, mostly for data
+//analysis
+type Category struct {
+	Name string
+	Tax  float32
 }
 
-type Item struct { //item that is being sold for consignment
-	name    string
-	cat     *Category
-	cost    float32
-	price   float32
-	dropped int
-	sold    int
+//Item that is being sold for consignment
+type Item struct {
+	Name    string
+	Cat     *Category
+	Cost    float32
+	Price   float32
+	Dropped int
+	Sold    int
 }
 
-type Location struct { //place where consignment items are being sold
-	name      string
-	address   string
-	inventory map[*Item]*salesData //stores the item quantity and sales
-	items     []*Item              //I have this in addition to the map so that items in a location can eventually be sorted
-	owed      float32
-	paid      float32
+//Location is a struct for places where
+//consignment objects are being sold
+type Location struct {
+	Name      string
+	Address   string
+	Inventory map[*Item]*SalesData //stores the item quantity and sales
+	Items     []*Item              //I have this in addition to the map so that items in a location can eventually be sorted
+	Owed      float32
+	Paid      float32
 }
 
-type salesData struct {
-	quantity int
-	sold     int
+type SalesData struct {
+	Quantity int
+	Sold     int
 }
 
-func (l *Location) Show() { //shows current information for location
-	fmt.Println(l.name)
+//Show displays current information about a type *Location struct
+func (l *Location) Show() {
+	fmt.Println(l.Name)
 
 	fmt.Println("\nCurrent inventory:")
-	for _, item := range l.items { //again, this will eventually be sorted
-		fmt.Println(item.name, ": ", l.inventory[item].quantity)
+	for _, item := range l.Items { //again, this will eventually be sorted
+		fmt.Println(item.Name, ": ", l.Inventory[item].Quantity)
 	}
 
 	fmt.Println("\nTotal Sales:")
-	for _, item := range l.items {
-		fmt.Println(item.name, ": ", l.inventory[item].sold)
+	for _, item := range l.Items {
+		fmt.Println(item.Name, ": ", l.Inventory[item].Sold)
 	}
 
-	fmt.Println("\nOutstanding balance for ", l.name, " :")
-	fmt.Println(l.owed)
+	fmt.Println("\nOutstanding balance for ", l.Name, " :")
+	fmt.Println(l.Owed)
 
-	fmt.Println("\nTotal Paid for ", l.name, " :")
-	fmt.Println(l.paid)
+	fmt.Println("\nTotal Paid for ", l.Name, " :")
+	fmt.Println(l.Paid)
 }
 
+//NewItem creates a new type *Item struct to drop at locations
 func NewItem(name string, cat *Category, cost float32, price float32) *Item {
 	a := &Item{name, cat, cost, price, 0, 0}
 	return a
 }
 
-func NewLocation(name, address string) *Location { //creates a new location to populate with items
-	m := make(map[*Item]*salesData)
+//NewLocation creates a new type *Location struct to populate with type *Item
+func NewLocation(name, address string) *Location {
+	m := make(map[*Item]*SalesData)
 	l := make([]*Item, 0)
 
 	a := &Location{name, address, m, l, 0, 0}
@@ -64,13 +73,18 @@ func NewLocation(name, address string) *Location { //creates a new location to p
 	return a
 }
 
-func NewCategory(s string, tax float32) *Category { //in case you want to track data for a certain group of items
+//NewCategory allows the user to create a new
+//category to label items with and keep track
+//of things like sales tax or sales by category
+func NewCategory(s string, tax float32) *Category {
 	a := &Category{s, tax} //this isn't really necessary for retail consignment in PA, but what the heck
 
 	return a
 }
 
-func containsItem(l []*Item, x *Item) bool { //checks whether a location has been stocked with an item
+//containsItem checks whether a location has been stocked with an item
+//and returns a bool
+func containsItem(l []*Item, x *Item) bool {
 	contains := false
 
 	for _, i := range l { //if the item is found in the slice, return "true"
@@ -81,44 +95,53 @@ func containsItem(l []*Item, x *Item) bool { //checks whether a location has bee
 	return contains
 }
 
-func (l *Location) AddItem(x *Item, y int) { //adds inventory to the location, unfortunately one item at a time currently
-	contains := containsItem(l.items, x) //check to see if the item is currently stocked
+//AddItem does what you might expect, adds an item and its
+//quantity to a specified location's inventory
+func (l *Location) AddItem(x *Item, y int) {
+	contains := containsItem(l.Items, x) //check to see if the item is currently stocked
 
 	switch contains {
 	case true:
-		l.inventory[x].quantity += y //increase the inventory count if the item exists at the store
+		l.Inventory[x].Quantity += y //increase the inventory count if the item exists at the store
 	default:
-		l.items = append(l.items, x) //if not, add the item to the list of existing items first
+		l.Items = append(l.Items, x) //if not, add the item to the list of existing items first
 
-		a := &salesData{0, 0} //instantiate sales data for item at this location
-		l.inventory[x] = a
-		l.inventory[x].quantity = y
+		a := &SalesData{0, 0} //instantiate sales data for item at this location
+		l.Inventory[x] = a
+		l.Inventory[x].Quantity = y
 	}
 
-	x.dropped += y
+	x.Dropped += y
 
 }
 
+//TakeStock allows a user to enter in the current inventory
+//and compare it to what was originally dropped off at that
+//location, giving total number sold
 func (l *Location) TakeStock(x *Item, y int) *Location { //sold is original inventory - current inventory
-	sold := l.inventory[x].quantity - y
-	l.owed += float32(sold) * x.price
-	l.inventory[x].quantity = y
-	l.inventory[x].sold += sold
+	sold := l.Inventory[x].Quantity - y
+	l.Owed += float32(sold) * x.Price
+	l.Inventory[x].Quantity = y
+	l.Inventory[x].Sold += sold
 
-	x.sold += sold
+	x.Sold += sold
 
 	return l
 }
 
+//TakePayment allows the user to enter in a payment
+//given by a location, which is automatically subtracted
+//from the total amount owed
 func (l *Location) TakePayment(x float32) {
-	l.owed -= x
-	l.paid += x
+	l.Owed -= x
+	l.Paid += x
 }
 
+//Show displays information about type *Item
 func (x *Item) Show() {
-	fmt.Println(x.name)
-	fmt.Println("\nProduction Cost:\n", x.cost)
-	fmt.Println("\nWholesale Price:\n", x.price)
-	fmt.Println("\nTotal Dropped:\n", x.dropped)
-	fmt.Println("\nTotal Sold:\n", x.sold)
+	fmt.Println(x.Name)
+	fmt.Println("\nProduction Cost:\n", x.Cost)
+	fmt.Println("\nWholesale Price:\n", x.Price)
+	fmt.Println("\nTotal Dropped:\n", x.Dropped)
+	fmt.Println("\nTotal Sold:\n", x.Sold)
 }

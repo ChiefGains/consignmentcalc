@@ -1,0 +1,11 @@
+{
+ "Name": "Toy",
+ "Cat": {
+  "Name": "retail",
+  "Tax": 0.06
+ },
+ "Cost": 0.25,
+ "Price": 1.5,
+ "Dropped": 33,
+ "Sold": 0
+}

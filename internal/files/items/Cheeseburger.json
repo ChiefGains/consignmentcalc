@@ -1,0 +1,11 @@
+{
+ "Name": "Cheeseburger",
+ "Cat": {
+  "Name": "food",
+  "Tax": 0.06
+ },
+ "Cost": 1.2,
+ "Price": 2.5,
+ "Dropped": 25,
+ "Sold": 0
+}
