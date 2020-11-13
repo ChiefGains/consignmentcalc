@@ -1,0 +1,25 @@
+{
+ "Name": "Burger Palace",
+ "Address": "Park Place",
+ "Inventory": {
+  "Cheeseburger": {
+   "Quantity": 5,
+   "Sold": 0
+  },
+  "Hamburger": {
+   "Quantity": 4,
+   "Sold": 0
+  },
+  "Toy": {
+   "Quantity": 8,
+   "Sold": 0
+  }
+ },
+ "Items": [
+  "Hamburger",
+  "Cheeseburger",
+  "Toy"
+ ],
+ "Owed": 0,
+ "Paid": 0
+}

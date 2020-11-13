@@ -7,9 +7,9 @@ import (
 
 func main() {
 
-	//initialize()
+	initialize()
 
-	readstuff()
+	//readstuff()
 
 }
 

@@ -1,0 +1,25 @@
+{
+ "Name": "Krusty Burger",
+ "Address": "Springfield",
+ "Inventory": {
+  "Cheeseburger": {
+   "Quantity": 20,
+   "Sold": 0
+  },
+  "Hamburger": {
+   "Quantity": 10,
+   "Sold": 0
+  },
+  "Toy": {
+   "Quantity": 25,
+   "Sold": 0
+  }
+ },
+ "Items": [
+  "Hamburger",
+  "Cheeseburger",
+  "Toy"
+ ],
+ "Owed": 0,
+ "Paid": 0
+}
