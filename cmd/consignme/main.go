@@ -3,16 +3,13 @@ package main
 import (
 	"code/github.com/consignmentcalc/internal/files"
 	"code/github.com/consignmentcalc/internal/generator"
-	"fmt"
 )
 
 func main() {
 
-	data := files.Loadfiles()
+	//initialize()
 
-	for _, item := range data.Items {
-		fmt.Println(item)
-	}
+	readstuff()
 
 }
 
@@ -45,9 +42,20 @@ func initialize() {
 	df.AddLocation(BurgerPalace)
 	df.AddLocation(KrustyBurger)
 
-	KrustyBurger.Show()
-	BurgerPalace.Show()
+	//KrustyBurger.Show()
+	//BurgerPalace.Show()
+
+	//df.Items[0].Show()
+	//df.Locations[0].Show()
 
 	files.MarshalFiles(df)
 
+}
+
+func readstuff() {
+	df := files.LoadFiles()
+
+	for _, item := range df.Items {
+		item.Show()
+	}
 }

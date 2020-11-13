@@ -23,17 +23,18 @@ type Item struct {
 //Location is a struct for places where
 //consignment objects are being sold
 type Location struct {
-	Name      string
-	Address   string
-	Inventory map[*Item]*SalesData //stores the item quantity and sales
-	Items     []*Item              //I have this in addition to the map so that items in a location can eventually be sorted
-	Owed      float32
-	Paid      float32
+	Name      string               `json:"Name"`
+	Address   string               `json:"Address"`
+	Inventory map[*Item]*SalesData `json:"Inventory"` //stores the item quantity and sales
+	Items     []*Item              `json:"Items"`     //I have this in addition to the map so that items in a location can eventually be sorted
+	Owed      float32              `json:"Owed"`
+	Paid      float32              `json:"Paid"`
 }
 
+//SalesData - exactly what it sounds like
 type SalesData struct {
-	Quantity int
-	Sold     int
+	Quantity int `json:"Quantity"`
+	Sold     int `json:"Sold"`
 }
 
 //Show displays current information about a type *Location struct

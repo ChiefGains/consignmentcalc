@@ -11,13 +11,13 @@ import (
 //package to handle the loading and writing of object files,
 //as well as the marshaling and unmarshaling of json data
 
-type files struct {
+type Files struct {
 	Categories []os.FileInfo
 	Items      []os.FileInfo
 	Locations  []os.FileInfo
 }
 
-type myData struct {
+type MyData struct {
 	Categories []*generator.Category
 	Items      []*generator.Item
 	Locations  []*generator.Location
@@ -29,9 +29,9 @@ func check(err error) {
 	}
 }
 
-//loads the json object files to be unmarshaled, and calls
+//LoadFiles loads the json object files to be unmarshaled, and calls
 //the unmarshalFiles func
-func Loadfiles() *myData {
+func LoadFiles() *MyData {
 	categories, err := ioutil.ReadDir("internal/files/categories")
 	check(err)
 	items, err := ioutil.ReadDir("internal/files/items")
@@ -39,7 +39,7 @@ func Loadfiles() *myData {
 	locations, err := ioutil.ReadDir("internal/files/locations")
 	check(err)
 
-	a := &files{categories, items, locations}
+	a := &Files{categories, items, locations}
 
 	b := unmarshalFiles(a)
 
@@ -48,77 +48,95 @@ func Loadfiles() *myData {
 
 //reads all json files in a set of specified directories
 //into a new type *myData object
-func unmarshalFiles(f *files) *myData {
+func unmarshalFiles(f *Files) *MyData {
+	dirname := "internal/files"
+
 	cat := make([]*generator.Category, 0)
 	for _, file := range f.Categories {
+		filename := dirname + "/categories/" + file.Name()
 		a := &generator.Category{}
-		b, _ := ioutil.ReadFile(file.Name())
-		_ = json.Unmarshal([]byte(b), a)
+		b, err := ioutil.ReadFile(filename)
+		check(err)
+		err = json.Unmarshal([]byte(b), a)
+		check(err)
 		cat = append(cat, a)
 	}
 
 	it := make([]*generator.Item, 0)
 	for _, file := range f.Items {
+		filename := dirname + "/items/" + file.Name()
 		a := &generator.Item{}
-		b, _ := ioutil.ReadFile(file.Name())
-		_ = json.Unmarshal([]byte(b), a)
+		b, err := ioutil.ReadFile(filename)
+		check(err)
+		err = json.Unmarshal([]byte(b), a)
+		check(err)
 		it = append(it, a)
+		a.Show()
 	}
 
 	loc := make([]*generator.Location, 0)
 	for _, file := range f.Locations {
+		filename := dirname + "/locations/" + file.Name()
 		a := &generator.Location{}
-		b, _ := ioutil.ReadFile(file.Name())
-		_ = json.Unmarshal([]byte(b), a)
+		b, err := ioutil.ReadFile(filename)
+		check(err)
+		err = json.Unmarshal([]byte(b), a)
+		check(err)
 		loc = append(loc, a)
 	}
 
-	return &myData{cat, it, loc}
+	return &MyData{cat, it, loc}
 }
 
-//takes all the objects in a *myData struct and writes them to json
-func MarshalFiles(m *myData) {
-	dirname := "code/github.com/consignmentcalc/internal/files"
+//MarshalFiles takes all the objects in a *myData struct and writes them to json
+func MarshalFiles(m *MyData) {
+	dirname := "internal/files"
 	for _, data := range m.Categories {
-		file, _ := json.MarshalIndent(data, "", " ")
+		file, err := json.MarshalIndent(data, "", " ")
+		check(err)
 		filename := dirname + "/categories/" + data.Name + ".json"
-		_ = ioutil.WriteFile(filename, file, 0644)
+		err = ioutil.WriteFile(filename, file, 0644)
+		check(err)
 	}
 
 	for _, data := range m.Items {
-		file, _ := json.MarshalIndent(data, "", " ")
+		file, err := json.MarshalIndent(data, "", " ")
+		check(err)
 		filename := dirname + "/items/" + data.Name + ".json"
-		_ = ioutil.WriteFile(filename, file, 0644)
+		err = ioutil.WriteFile(filename, file, 0644)
+		check(err)
 	}
 
 	for _, data := range m.Locations {
-		file, _ := json.MarshalIndent(data, "", " ")
+		file, err := json.MarshalIndent(data, "", " ")
+		check(err)
 		filename := dirname + "/locations/" + data.Name + ".json"
-		_ = ioutil.WriteFile(filename, file, 0644)
+		err = ioutil.WriteFile(filename, file, 0644)
+		check(err)
 	}
 
 }
 
-//create a *myData object to hold information
-func DataFrame() *myData {
+//DataFrame create a *MyData object to hold information
+func DataFrame() *MyData {
 	cat := make([]*generator.Category, 0)
 	it := make([]*generator.Item, 0)
 	loc := make([]*generator.Location, 0)
 
-	return &myData{cat, it, loc}
+	return &MyData{cat, it, loc}
 }
 
-//adds a location to type *myData struct
-func (m *myData) AddLocation(l *generator.Location) {
+//AddLocation adds a location to type *MyData struct
+func (m *MyData) AddLocation(l *generator.Location) {
 	m.Locations = append(m.Locations, l)
 }
 
-//adds an item to type *myData struct
-func (m *myData) AddItem(it *generator.Item) {
+//AddItem adds an item to type *MyData struct
+func (m *MyData) AddItem(it *generator.Item) {
 	m.Items = append(m.Items, it)
 }
 
-//adds a category to type *myData struct
-func (m *myData) AddCategory(cat *generator.Category) {
+//AddCategory adds a category to type *MyData struct
+func (m *MyData) AddCategory(cat *generator.Category) {
 	m.Categories = append(m.Categories, cat)
 }
