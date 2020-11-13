@@ -1,3 +1,28 @@
 body {
-    background-image: "web/static/images/Jungle-Image.jpg";
+    background-image: url("images/Jungle-Image.jpg");
+}
+
+h1 {
+    text-align: center;
+    color: whitesmoke;
+    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
+}
+
+h2 {
+    text-align: center;
+    color: whitesmoke;
+    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
+}
+
+p {
+    text-align: center;
+    color:whitesmoke;
+    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
+}
+
+ul {
+    list-style-type: none;
+    text-align: center;
+    color: whitesmoke;
+    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
 }
