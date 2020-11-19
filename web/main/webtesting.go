@@ -18,7 +18,9 @@ func main() {
 
 	fmt.Println("Now serving on port 8080")
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
+	static := http.StripPrefix("/static/", http.FileServer(http.Dir("web/static")))
+
+	http.Handle("/static/", static)
 	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/home", handleHome)
 
