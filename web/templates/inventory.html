@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head>
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="../static/styles/style.css">
+    <script type="text/javascript" src="./inventory.js">
+        {{.passJSON}} //no idea if this will work, but I think it's worth a shot
+    </script>
+</head>
+<body>
+    <label for="location">Select Location:</label>
+        <select name="location" id="location">
+        </select>
+        <!--once a location is selected, there needs to be a way to use the functions in the generator package-->
+</body>

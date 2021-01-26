@@ -1,4 +1,6 @@
 package files
+//package files to handle the loading and writing of object files,
+//as well as the marshaling and unmarshaling of json data
 
 import (
 	"code/github.com/consignmentcalc/internal/generator"
@@ -7,9 +9,6 @@ import (
 	"log"
 	"os"
 )
-
-//package to handle the loading and writing of object files,
-//as well as the marshaling and unmarshaling of json data
 
 type Files struct {
 	Categories []os.FileInfo

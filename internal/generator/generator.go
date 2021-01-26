@@ -1,6 +1,15 @@
 package generator
+//generator package simply generates necessary code for this module
 
 import "fmt"
+
+
+type User struct{
+	Username string `json:"Username"`
+	Password string `json:"Password"`
+	Active bool `json:"Active"`
+}
+
 
 //Category is a struct that holds data about what
 //category an *Item belongs to, mostly for data
@@ -35,6 +44,11 @@ type Location struct {
 type SalesData struct {
 	Quantity int `json:"Quantity"`
 	Sold     int `json:"Sold"`
+}
+
+//NewUser creates and returns a new user, whose session is inactive
+func NewUser(username, password string) *User{
+	return &User{un, pwd, false}
 }
 
 //Show displays current information about a type *Location struct
