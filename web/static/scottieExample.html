@@ -1,0 +1,24 @@
+<label for="cars">Select Something:</label>
+<select name="items" id="items">
+<!-- EMPTY LIST -->
+</select>
+
+
+<script>
+var data = [
+	{id: 0,name: "Item 0",value: "item-0"},
+  {id: 1,name: "Item 1",value: "item-1"},
+  {id: 2,name: "Item 2",value: "item-2"},
+  {id: 3,name: "Item 3",value: "item-3"},
+  {id: 4,name: "Item 4",value: "item-4"},
+];
+
+var items = document.getElementById('items');
+
+for (i = 0; i < data.length; i++) {
+  var id = data[i].id;
+  var name = data[i].name;
+  var value = data[i].value;
+  items.innerHTML += `<option id="${id}" value="${value}">${name}</option>`;
+}
+</script>
