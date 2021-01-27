@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head>
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="../static/styles/style.css">
+    <script type="text/javascript" src="./location.js"></script>
+</head>
+<body>
+    <h1>Select a Location</h1>
+    <form action="/inventory" method="POST">
+    <label for="location"></label>
+    <select name="location" id="location"></select>
+    <input type="submit" value="Go to Location">
+    </form>
+</body>
