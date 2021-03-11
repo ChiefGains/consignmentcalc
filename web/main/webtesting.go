@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 	"sync"
-	"code/github.com/consignmentcalc/internal/generator"
-	"code/github.com/consignmentcalc/internal/files"
+
+	"github.com/chiefgains/consignmentcalc/internal/generator"
 )
 
-type UserSession struct{
+type UserSession struct {
 	user *generator.User
 	sync.Pool
 }

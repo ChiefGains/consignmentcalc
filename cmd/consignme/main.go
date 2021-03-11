@@ -1,8 +1,8 @@
 package main
 
 import (
-	"code/github.com/consignmentcalc/internal/files"
-	"code/github.com/consignmentcalc/internal/generator"
+	"github.com/chiefgains/consignmentcalc/internal/files"
+	"github.com/chiefgains/consignmentcalc/internal/generator"
 )
 
 func main() {
